@@ -1,0 +1,126 @@
+h1 {
+	font-weight: 700
+}
+
+#logo {
+	display: block;
+	margin: 20px auto 10px auto;
+	max-width:400px;
+	width: 100%
+}
+
+.MathJax_Display { 
+    text-align: left !important;
+    display: inline !important;
+}
+
+.snapshot {
+	width: 100%;
+}
+
+.info {
+  color: #666;
+  padding-top: 5px;
+  font-size: 16px;
+  text-align: center;
+  display: block;
+}
+
+.measures {
+  font-size: 16px;
+}
+
+.measures h2, .measures table {
+  margin-bottom: 20px;
+}
+
+.measures table th, .measures table td {
+  text-align: center;
+  padding: 4px;
+  border: 1px solid #555555;
+}
+
+.form-group {
+	margin-bottom: 10px;
+}
+
+div.selectize-dropdown-content > div.optgroup > [data-selectable] {
+	padding-left: 24px;
+}
+
+div.hover-plot-wrapper {
+	position: relative;
+}
+
+#hover-tooltip {
+	position: absolute;
+	z-index:100;
+	background-color: rgba(245, 245, 245, 0.85);
+	padding: 5px;
+	margin-left: inherit;
+}
+
+#hover-tooltip > p{
+	margin-bottom: 0;
+}
+
+#rglPlot {
+	margin: 0 auto;
+}
+
+#rglPlot, #crossSectionPlot {
+	margin: 10px auto 10px auto;
+}
+
+.tetrahedron-download-btn {
+  width: 100%;
+}
+
+div.cross-section-snapshot-row {
+}
+
+div.cross-section-snapshot-btn {
+	padding-right: 0;
+}
+
+div.cross-section-snapshot-list {
+	margin-top: -20px;
+	margin-bottom: -15px;
+    padding-left: 0;
+}
+
+@media(max-width:767px){
+	div.cross-section-snapshot-btn {
+		padding-right: 15px;
+	}
+
+	div.cross-section-snapshot-list {
+		margin-top: -10px;
+		padding-left: 15px;
+	}
+}
+
+div.cross-section-snapshot-btn > a {
+	width: 100%;
+}
+
+div.cross-section-snapshot-list > div {
+	margin-bottom: 0;
+}
+
+.plot-container {
+	position: relative;
+}
+
+#rgl-spinner, #cross-section-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  margin-top: -33px;  /* half of the spinner's height */
+  margin-left: -33px; /* half of the spinner's width */
+}
+
+#rglPlot.recalculating , #crossSectionPlot.recalculating {
+  z-index: -2;
+}
