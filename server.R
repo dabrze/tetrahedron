@@ -89,7 +89,7 @@ shinyServer(function(input, output, session) {
   getCrossSectionPlot <- function(){
     cls <- (isClassificationMeasure(input$measure) && input$customMeasure == "")
     
-    par(mar=c(1.5,1.5,1.5,1.5))
+    par(mar=c(2,2.5,3,2.5))
     if (input$showContour) {
       contour <- list(col = "#FFFFFF", labcex = 1, lwd = 2, alpha = 0.75)
     } else {
@@ -101,9 +101,22 @@ shinyServer(function(input, output, session) {
             colkey = FALSE, xaxt='n', yaxt='n', xlab="", ylab="")
     
     if (input$showLabels) {
-      title(main=ifelse(input$showTitle, getPlotTitle(), ""), ylab="tnr", xlab="fnr", line=0.5)
+      title(main=ifelse(input$showTitle, getPlotTitle(), ""), line=2)
+      mtext(expression(bar("FP")), side=1, line=0.5)
+      mtext(expression("TPFP"), side=1, line=0.5, adj=-0.05)
+      mtext(expression("FNFP"), side=1, line=0.5, adj=1.05)
+      
+      mtext(expression(bar("TP")), side=2, line=0.5, las=1)
+      
+      mtext(expression(bar("TN")), side=3, line=0.5)
+      mtext(expression("TPTN"), side=3, line=0.5, adj=-0.05)
+      mtext(expression("FNTN"), side=3, line=0.5, adj=1.05)
+      
+      mtext(expression(bar("FN")), side=4, line=0.5, las=1)
+      
+      text(5, par("usr")[4], "X", srt = 30, xpd = TRUE, pos = 3)
     } else if (input$showTitle) {
-      title(main=getPlotTitle(), line=0.5)
+      title(main=getPlotTitle(), line=1.5)
     }
   }
   
@@ -236,8 +249,8 @@ validateInputs <- function(input) {
       tryCatch({ eval(parse(text=input$customMeasure)); TRUE },
                error = function(e) { FALSE }), 
       "Invalid expression in custom function."),
-    need(input$ratio >= 0.05 && input$ratio <= 0.95, 
-         "The minority ratio has to be between 0.05 and 0.95 to properly display the image.")
+    need(input$ratio >= 0.1 && input$ratio <= 0.9, 
+         "The minority ratio has to be between 0.1 and 0.9 to properly display the image.")
   )
 }
 
