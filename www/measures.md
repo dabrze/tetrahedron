@@ -52,17 +52,17 @@ $$\begin{align}
 	C(H,E)&=P(E \wedge H)-P(E)P(H)=\dfrac{a}{n}-\dfrac{(a+c)(a+b)}{n^{2}}=\dfrac{ad-bc}{n^2}\\\\
 	c_1(H,E)&=
 			\begin{cases}        
-				\alpha + \beta A(H,E) \quad \text{in case of confirmation when } c=0\\\\
+				\alpha + (1-\alpha) A(H,E) \quad \text{in case of confirmation when } c=0\\\\
 				\alpha Z(H,E) \quad \text{in case of confirmation when } c>0 \\\\
 				\alpha Z(H,E) \quad \text{in case of disconfirmation when } a>0 \\\\
-				-\alpha + \beta A(H,E) \quad \text{in case of disconfirmation when } a=0 \\\\
+				-\alpha + (1-\alpha) A(H,E) \quad \text{in case of disconfirmation when } a=0 \\\\
 			\end{cases}\\\\
 	c_2(H,E)&=
 			\begin{cases}
-				\alpha + \beta Z(H,E) \quad \text{in case of confirmation when } b=0\\\\
+				\alpha + (1-\alpha) Z(H,E) \quad \text{in case of confirmation when } b=0\\\\
 				\alpha A(H,E) \quad \text{in case of confirmation when } b>0\\\\
 				\alpha A(H,E) \quad \text{in case of disconfirmation when } d>0\\\\
-				-\alpha + \beta Z(H,E) \quad \text{in case of disconfirmation when } d=0\\\\
+				-\alpha + (1-\alpha) Z(H,E) \quad \text{in case of disconfirmation when } d=0\\\\
 			\end{cases}\\\\
 	c_3(H,E)&=
 			\begin{cases}

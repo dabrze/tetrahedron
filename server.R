@@ -25,7 +25,7 @@ shinyServer(function(input, output, session) {
     c <- points[,3]
     d <- points[,4]
     n <- max(points[1,])
-    v <- getMeasureValues(input$measure, input$customMeasure, a, b, c, d, n)
+    v <- getMeasureValues(input$measure, input$customMeasure, a, b, c, d, n, input$alpha, input$beta)
     
     # Order the points to achieve a proper cross-section
     orderedPoints <- v[crossSectionPoints][order(b[crossSectionPoints], a[crossSectionPoints], decreasing = c(T,T))]
@@ -57,7 +57,7 @@ shinyServer(function(input, output, session) {
     c <- points[,3]
     d <- points[,4]
     n <- max(points[1,])
-    v <- getMeasureValues(input$measure, input$customMeasure, a, b, c, d, n)
+    v <- getMeasureValues(input$measure, input$customMeasure, a, b, c, d, n, input$alpha, input$beta)
     cls <- (isClassificationMeasure(input$measure) && input$customMeasure == "")
     vertices <- t(matrix(c(+1, +1, +1, -1, +1, -1, -1, -1, +1, +1, -1, -1), ncol=4))
     
@@ -178,14 +178,60 @@ shinyServer(function(input, output, session) {
       htmlwidgets::saveWidget(getRgl(), file)
     }
   )
+  
+  output$hasAlpha <- reactive({
+    if ("alpha" %in% names(measureParameters[[input$measure]])
+        || grepl("p1", input$customMeasure)){
+      if(input$customMeasure == ""){
+        updateSliderInput(session, "alpha",
+                          min = measureParameters[[input$measure]]$alpha$min,
+                          max = measureParameters[[input$measure]]$alpha$max,
+                          value = measureParameters[[input$measure]]$alpha$default,
+                          step = measureParameters[[input$measure]]$alpha$step)
+      } else {
+        updateSliderInput(session, "alpha",
+                          min = 0,
+                          max = 1,
+                          value = 0.5,
+                          step = 0.1)
+      }
+      TRUE
+    } else {
+      FALSE
+    }
+  })
+  outputOptions(output, 'hasAlpha', suspendWhenHidden = FALSE)
+  
+  output$hasBeta <- reactive({
+    if ("beta" %in% names(measureParameters[[input$measure]])
+        || grepl("p2", input$customMeasure)){
+      if(input$customMeasure == ""){
+        updateSliderInput(session, "beta",
+                          min = measureParameters[[input$measure]]$beta$min,
+                          max = measureParameters[[input$measure]]$beta$max,
+                          value = measureParameters[[input$measure]]$beta$default,
+                          step = measureParameters[[input$measure]]$beta$step)
+      } else {
+        updateSliderInput(session, "beta",
+                          min = 0,
+                          max = 1,
+                          value = 0.5,
+                          step = 0.01)
+      }
+      TRUE
+    } else {
+      FALSE
+    }
+  })
+  outputOptions(output, 'hasBeta', suspendWhenHidden = FALSE)
 })
 
 validateInputs <- function(input) {
-  a=1; b=1; c=1; d=1; n=4;
+  a=1; b=1; c=1; d=1; n=4; p1=1; p2=1;
   
   shiny::validate(
-    need(input$customMeasure == "" || grepl("^[a-d0-9 n().^%*/+-]+$", input$customMeasure),
-         "In custom functions, please use only: a, b, c, d, n, numbers, and math operators. For example, try: a/(b-c)."),
+    need(input$customMeasure == "" || grepl("^[a-dp0-9 n().^%*/+-]+$", input$customMeasure),
+         "In custom functions, please use only: a, b, c, d, n, p1, p2, numbers, and math operators. For example, try: a/(b-c)."),
     need(input$customMeasure == "" ||
       tryCatch({ eval(parse(text=input$customMeasure)); TRUE },
                error = function(e) { FALSE }), 
@@ -205,9 +251,9 @@ getPallete <- function(paletteName) {
   }
 }
 
-getMeasureValues <- function(measure, customMeasure, a, b, c, d, n) {
+getMeasureValues <- function(measure, customMeasure, a, b, c, d, n, p1, p2) {
   if (customMeasure == "") {
-    measureList[[measure]](a, b, c, d)
+    measureList[[measure]](a, b, c, d, p1, p2)
   } else {
     eval(parse(text=customMeasure))
   }
