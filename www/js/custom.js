@@ -82,7 +82,7 @@ setTimeout(function(){
   }
   
   if (!gl) {
-    $("#rglPlot").parent().prepend("<div class='alert alert-warning alert-dismissible' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Hmm. We could not initialize WebGL. Try refreshing the page, and if that doesn't help check if you have the latest drivers and browser: <a href='http://get.webgl.org/troubleshooting'>http://get.webgl.org/troubleshooting</a>.</div>");
+    $("#rglPlot").parent().prepend("<div class='alert alert-warning alert-dismissible' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>Hmm... It's taking some time to initialize WebGL. Try refreshing the page, and if that doesn't help check if you have the latest drivers and browser: <a href='http://get.webgl.org/troubleshooting'>http://get.webgl.org/troubleshooting</a>.</div>");
     return;
-  }}, 4000);
+  }}, 5000);
 });

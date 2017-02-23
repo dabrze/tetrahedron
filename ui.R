@@ -80,7 +80,8 @@ shinyUI(fluidPage(
                        p("All visualized classification measures are defined based on a two-class confusion matrix."),
                        p("Interestingness measures are defined based on a contingency table summarizing examples
                          satisfying and not satisfying the evidence or hypothesis of a rule."),
-                       p("The remaining measures are based on a two-by-two matrix: \\(\\begin{bmatrix}a & c\\\\b & d\\end{bmatrix}\\)."))
+                       p("The remaining measures are based on a two-by-two matrix: \\(\\begin{bmatrix}a & c\\\\b & d\\end{bmatrix}\\).")),
+      rglwgtctrl('ctrlplot3d')
     ),
     
     # Generated 3d plot
