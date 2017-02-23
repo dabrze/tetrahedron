@@ -38,10 +38,10 @@ shinyUI(fluidPage(
           textInput("customMeasure", label ="Custom function", value = "", placeholder="Write an expression..."),
           conditionalPanel("output.hasAlpha == true",
             sliderInput("alpha", label="Measure parameter (alpha)", min = 0, max = 1, value = 0.5, 
-                        animate=animationOptions(interval = 500, loop = F))),
+                        animate=animationOptions(interval = 500, loop = T))),
           conditionalPanel("output.hasBeta == true",
             sliderInput("beta", label="Measure parameter (beta)", min = 0, max = 1, value = 0.5, 
-                        animate=animationOptions(interval = 500, loop = F)))),
+                        animate=animationOptions(interval = 500, loop = T)))),
       conditionalPanel(crossSectionTab,
           numericInput("ratio", label = "Minority ratio", value = 0.5,
                       min = 0.1, max = 0.9, step = 0.05)),
@@ -80,8 +80,7 @@ shinyUI(fluidPage(
                        p("All visualized classification measures are defined based on a two-class confusion matrix."),
                        p("Interestingness measures are defined based on a contingency table summarizing examples
                          satisfying and not satisfying the evidence or hypothesis of a rule."),
-                       p("The remaining measures are based on a two-by-two matrix: \\(\\begin{bmatrix}a & c\\\\b & d\\end{bmatrix}\\).")),
-      rglwgtctrl('ctrlplot3d')
+                       p("The remaining measures are based on a two-by-two matrix: \\(\\begin{bmatrix}a & c\\\\b & d\\end{bmatrix}\\)."))
     ),
     
     # Generated 3d plot

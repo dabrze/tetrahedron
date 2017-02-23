@@ -16,6 +16,21 @@ library(dplyr)
 source("measures.R")
 
 shinyServer(function(input, output, session) {
+  validateInputs <- reactive({
+    a=1; b=1; c=1; d=1; n=4; p1=1; p2=1;
+    
+    shiny::validate(
+      need(input$customMeasure == "" || grepl("^[a-dp0-9 n().^%*/+-]+$", input$customMeasure),
+           "In custom functions, please use only: a, b, c, d, n, p1, p2, numbers, and math operators. For example, try: a/(b-c)."),
+      need(input$customMeasure == "" ||
+             tryCatch({ eval(parse(text=input$customMeasure)); TRUE },
+                      error = function(e) { FALSE }), 
+           "Invalid expression in custom function."),
+      need(input$ratio >= 0.1 && input$ratio <= 0.9, 
+           "The minority ratio has to be between 0.1 and 0.9 to properly display the image.")
+    )
+  })
+  
   getTetrahedronPoints <- reactive({
     resolutions[[as.character(input$resolution)]]
   })
@@ -85,8 +100,12 @@ shinyServer(function(input, output, session) {
       ""
     }
   })
-  
-  getRgl <- reactive({
+
+  observe({
+    validateInputs()
+    prevIds <- rgl.ids()$id
+    rgl.clear()
+    
     points <- resolutions[[as.character(input$resolution)]]
     a <- points[,1]
     b <- points[,2]
@@ -105,22 +124,20 @@ shinyServer(function(input, output, session) {
     colors <- pal[dense_rank(v)]
     colors[is.na(colors)] <- input$naColor
     layers <- getSkinLayers(points, n, input$layers)
-    par <- isolate(getBrowserPar3d(input))
 
-    open3d(zoom = par$zoom, userMatrix = par$userMatrix, cex = 1.3)
-    mesh <- plot3d(x[layers], y[layers], z[layers], col = colors[layers],
-                   box = F, axes = F, size = input$pointSize, 
-                   main = getPlotTitle(), xlab="", ylab = "", zlab="")
+    plot3d(x[layers], y[layers], z[layers], col = colors[layers],
+           box = F,axes = F, size = input$pointSize,
+           main = getPlotTitle(), xlab="", ylab = "", zlab="")
     
     if (input$showLabels) {
-      text <- text3d(vertices * 1.2, texts=if(cls) c("TP", "FP", "FN", "TN") else c("A", "B", "C", "D"))
+      text3d(vertices * 1.2, texts=if(cls) c("TP", "FP", "FN", "TN") else c("A", "B", "C", "D"))
     }
     
     if (input$showSilhouette) {
-      lines <- lines3d(vertices[combn(nrow(vertices), 2),]* (1 + 0.005*input$pointSize), col="#444444", lwd = 1)
+      lines3d(vertices[combn(nrow(vertices), 2),]* (1 + 0.005*input$pointSize), col="#444444", lwd = 1)
     }
     
-    rglwidget()
+    session$sendCustomMessage("sceneChange", sceneChange("rglPlot", delete = prevIds, add = rgl.ids()$id))
   })
   
   getCrossSectionPlot <- function(){
@@ -159,29 +176,20 @@ shinyServer(function(input, output, session) {
   
   # Plot measure visualization
   output$rglPlot <- renderRglwidget({
-    validateInputs(input)
-    getRgl()
-  })
-  
-  
-  # Periodically get view parameters from browser
-  observe({
-    invalidateLater(500, session)
-    session$sendInputMessage("ctrlplot3d",list(cmd="getpar3d", rglwidgetId="rglPlot"))
+    rglwidget()
   })
   
   # Plot cross-section
   output$crossSectionPlot <- renderPlot({
-      validateInputs(input)
       getCrossSectionPlot()
     },
-    width = reactive({validateInputs(input); nrow(getCrossSection())*csMult}),
-    height = reactive({validateInputs(input); ncol(getCrossSection())*csMult})
+    width = reactive({validateInputs(); nrow(getCrossSection())*csMult}),
+    height = reactive({validateInputs(); ncol(getCrossSection())*csMult})
   )
   
   # Cross-section tooltip
   output$hoverInfo <- renderUI({
-    validateInputs(input)
+    validateInputs()
     hover <- input$plotHover
     data <- getCrossSection()
     point <- nearPoints(expand.grid(1:nrow(data)/nrow(data), 1:ncol(data)/ncol(data)), hover, 
@@ -225,7 +233,7 @@ shinyServer(function(input, output, session) {
     },
     content = function(file)
     {
-      htmlwidgets::saveWidget(getRgl(), file)
+      htmlwidgets::saveWidget(rglwidget(), file)
     }
   )
   
@@ -275,21 +283,6 @@ shinyServer(function(input, output, session) {
   })
   outputOptions(output, 'hasBeta', suspendWhenHidden = FALSE)
 })
-
-validateInputs <- function(input) {
-  a=1; b=1; c=1; d=1; n=4; p1=1; p2=1;
-  
-  shiny::validate(
-    need(input$customMeasure == "" || grepl("^[a-dp0-9 n().^%*/+-]+$", input$customMeasure),
-         "In custom functions, please use only: a, b, c, d, n, p1, p2, numbers, and math operators. For example, try: a/(b-c)."),
-    need(input$customMeasure == "" ||
-      tryCatch({ eval(parse(text=input$customMeasure)); TRUE },
-               error = function(e) { FALSE }), 
-      "Invalid expression in custom function."),
-    need(input$ratio >= 0.1 && input$ratio <= 0.9, 
-         "The minority ratio has to be between 0.1 and 0.9 to properly display the image.")
-  )
-}
 
 getPallete <- function(paletteName) {
   if (paletteName == "Jet") { # for Matlab fans ;)
