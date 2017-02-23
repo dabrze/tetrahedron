@@ -16,6 +16,7 @@ rglwgtctrl <- function(inputId, value="", nrows, ncols) {
 }
 
 shinyUI(fluidPage(
+  registerSceneChange(),
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css")),
   tags$head(tags$script(src = "js/custom.js")),
   
@@ -37,10 +38,10 @@ shinyUI(fluidPage(
           textInput("customMeasure", label ="Custom function", value = "", placeholder="Write an expression..."),
           conditionalPanel("output.hasAlpha == true",
             sliderInput("alpha", label="Measure parameter (alpha)", min = 0, max = 1, value = 0.5, 
-                        animate=animationOptions(interval = 300, loop = F))),
+                        animate=animationOptions(interval = 500, loop = F))),
           conditionalPanel("output.hasBeta == true",
             sliderInput("beta", label="Measure parameter (beta)", min = 0, max = 1, value = 0.5, 
-                        animate=animationOptions(interval = 300, loop = F)))),
+                        animate=animationOptions(interval = 500, loop = F)))),
       conditionalPanel(crossSectionTab,
           numericInput("ratio", label = "Minority ratio", value = 0.5,
                       min = 0.1, max = 0.9, step = 0.05)),

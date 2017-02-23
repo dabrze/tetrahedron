@@ -16,6 +16,44 @@ library(dplyr)
 source("measures.R")
 
 shinyServer(function(input, output, session) {
+  getTetrahedronPoints <- reactive({
+    resolutions[[as.character(input$resolution)]]
+  })
+  
+  getMeasureValues <- reactive({
+    points <- getTetrahedronPoints()
+    a <- points[,1]
+    b <- points[,2]
+    c <- points[,3]
+    d <- points[,4]
+    n <- max(points[1,])
+    
+    if (input$customMeasure == "") {
+      measureList[[input$measure]](a, b, c, d, input$alpha, input$beta)
+    } else {
+      p1=input$alpha
+      p2=input$beta
+      eval(parse(text=input$customMeasure))
+    }
+  })
+  
+  getCrosssectionMeasureValues <- reactive({
+    points <- resolutions[["47905"]]
+    a <- points[,1]
+    b <- points[,2]
+    c <- points[,3]
+    d <- points[,4]
+    n <- max(points[1,])
+    
+    if (input$customMeasure == "") {
+      measureList[[input$measure]](a, b, c, d, input$alpha, input$beta)
+    } else {
+      p1=input$alpha
+      p2=input$beta
+      eval(parse(text=input$customMeasure))
+    }
+  })
+  
   getCrossSection <- reactive({
     points <- resolutions[["47905"]]
     crossSectionPoints <- ((points[,1] + points[,3]) == as.integer(input$ratio * max(points[1,])))
@@ -25,7 +63,7 @@ shinyServer(function(input, output, session) {
     c <- points[,3]
     d <- points[,4]
     n <- max(points[1,])
-    v <- getMeasureValues(input$measure, input$customMeasure, a, b, c, d, n, input$alpha, input$beta)
+    v <- getCrosssectionMeasureValues()
     
     # Order the points to achieve a proper cross-section
     orderedPoints <- v[crossSectionPoints][order(b[crossSectionPoints], a[crossSectionPoints], decreasing = c(T,T))]
@@ -36,7 +74,7 @@ shinyServer(function(input, output, session) {
     matrix(orderedPoints, nrow = input$ratio*n+1)
   })
   
-  getPlotTitle <- function() {
+  getPlotTitle <- reactive({
     if (input$showTitle) {
       if(input$customMeasure == "") {
         input$measure
@@ -46,18 +84,16 @@ shinyServer(function(input, output, session) {
     } else {
       ""
     }
-  }
+  })
   
   getRgl <- reactive({
-    try(rgl.close())
-    
     points <- resolutions[[as.character(input$resolution)]]
     a <- points[,1]
     b <- points[,2]
     c <- points[,3]
     d <- points[,4]
     n <- max(points[1,])
-    v <- getMeasureValues(input$measure, input$customMeasure, a, b, c, d, n, input$alpha, input$beta)
+    v <- getMeasureValues()
     cls <- (isClassificationMeasure(input$measure) && input$customMeasure == "")
     vertices <- t(matrix(c(+1, +1, +1, -1, +1, -1, -1, -1, +1, +1, -1, -1), ncol=4))
     
@@ -70,17 +106,18 @@ shinyServer(function(input, output, session) {
     colors[is.na(colors)] <- input$naColor
     layers <- getSkinLayers(points, n, input$layers)
     par <- isolate(getBrowserPar3d(input))
-    
+
     open3d(zoom = par$zoom, userMatrix = par$userMatrix, cex = 1.3)
-    plot3d(x[layers], y[layers], z[layers], col = colors[layers], box = F, axes = F, size = input$pointSize,
-           main = getPlotTitle(), xlab="", ylab = "", zlab="")
+    mesh <- plot3d(x[layers], y[layers], z[layers], col = colors[layers],
+                   box = F, axes = F, size = input$pointSize, 
+                   main = getPlotTitle(), xlab="", ylab = "", zlab="")
     
     if (input$showLabels) {
-      text3d(vertices * 1.2, texts=if(cls) c("TP", "FP", "FN", "TN") else c("A", "B", "C", "D"))
+      text <- text3d(vertices * 1.2, texts=if(cls) c("TP", "FP", "FN", "TN") else c("A", "B", "C", "D"))
     }
     
     if (input$showSilhouette) {
-      lines3d(vertices[combn(nrow(vertices), 2),]* (1 + 0.005*input$pointSize), col="#444444", lwd = 1)
+      lines <- lines3d(vertices[combn(nrow(vertices), 2),]* (1 + 0.005*input$pointSize), col="#444444", lwd = 1)
     }
     
     rglwidget()
@@ -261,14 +298,6 @@ getPallete <- function(paletteName) {
     brewer.pal(9,paletteName)
   } else {
     rev(brewer.pal(9,paletteName))
-  }
-}
-
-getMeasureValues <- function(measure, customMeasure, a, b, c, d, n, p1, p2) {
-  if (customMeasure == "") {
-    measureList[[measure]](a, b, c, d, p1, p2)
-  } else {
-    eval(parse(text=customMeasure))
   }
 }
 
