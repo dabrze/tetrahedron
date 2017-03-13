@@ -26,19 +26,17 @@ h1 {
   display: block;
 }
 
-.help {
+.measures, .help {
   font-size: 16px;
 }
 
-.measures {
-  font-size: 16px;
-}
-
-.measures h2, .measures table {
+.measures h2, .measures table,
+.help table  {
   margin-bottom: 20px;
 }
 
-.measures table th, .measures table td {
+.measures table th, .measures table td,
+.help table th, .help table td{
   text-align: center;
   padding: 4px;
   border: 1px solid #555555;
