@@ -137,7 +137,7 @@ shinyServer(function(input, output, session) {
     }
 
     image2D(getCrossSection(), col=colorRampPalette(getPallete(input$palette))(256),
-            NAcol=input$naColor, resfac = 8, contour=contour,
+            NAcol=input$naColor, resfac = 4, contour=contour,
             colkey = FALSE, xaxt='n', yaxt='n', xlab="", ylab="")
     
     if (input$showLabels) {
@@ -178,6 +178,17 @@ shinyServer(function(input, output, session) {
       session$sendInputMessage("ctrlplot3d",list(cmd="getpar3d", rglwidgetId="rglPlot"))
     } else {
       rglObserver$resume()
+    }
+  })
+  
+  # We don't want to recalculate the tetrahedron when other tabs are active
+  # (we have to this manually since we're controlling the rgl scene with an observer)
+  observe({
+    activeTab <- input$tabs
+    if (activeTab == "Tetrahedron") {
+      rglObserver$resume()
+    } else {
+      rglObserver$suspend()
     }
   })
   

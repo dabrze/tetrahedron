@@ -44,20 +44,28 @@ $(document).ready(function(){
   });
   
   var rglObserver = new MutationObserver(function(mutations) {
-    if ($("#rglPlot").hasClass("recalculating") || $("#rglPlot > canvas")[0] === undefined) {
-      $("#rgl-spinner").show();
+    if ($("html").hasClass("shiny-busy") || $("#rglPlot > canvas")[0] === undefined) {
+      setTimeout(function(){
+        if ($("html").hasClass("shiny-busy") || $("#rglPlot > canvas")[0] === undefined) {
+          $("#rgl-spinner").show();
+        }
+      }, 700);
     } else {
       $("#rgl-spinner").hide();
     }
   });
-  var rglTarget = document.querySelector('#rglPlot');
+  var rglTarget = document.querySelector('html');
   rglObserver.observe(rglTarget, {
     attributes: true
   });
   
   var crossSectionObserver = new MutationObserver(function(mutations) {
     if ($("#crossSectionPlot").hasClass("recalculating") || $("#crossSectionPlot > img")[0] === undefined) {
-      $("#cross-section-spinner").show();
+      setTimeout(function(){
+        if ($("#crossSectionPlot").hasClass("recalculating") || $("#crossSectionPlot > img")[0] === undefined) {
+          $("#cross-section-spinner").show();
+        }
+      }, 700);
     } else {
       $("#cross-section-spinner").hide();
     }

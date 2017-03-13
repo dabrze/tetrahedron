@@ -18,6 +18,7 @@ rglwgtctrl <- function(inputId, value="", nrows, ncols) {
 shinyUI(fluidPage(
   registerSceneChange(),
   tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "css/style.css")),
+  tags$head(tags$link(rel = "icon", type = "image/png", href = "img/favicon.png")),
   tags$head(tags$script(src = "js/custom.js")),
   
   # Header
@@ -38,13 +39,14 @@ shinyUI(fluidPage(
           textInput("customMeasure", label ="Custom function", value = "", placeholder="Write an expression..."),
           conditionalPanel("output.hasAlpha == true",
             sliderInput("alpha", label="Measure parameter (alpha)", min = 0, max = 1, value = 0.5, 
-                        animate=animationOptions(interval = 500, loop = T))),
+                        animate=animationOptions(interval = 700, loop = T))),
           conditionalPanel("output.hasBeta == true",
             sliderInput("beta", label="Measure parameter (beta)", min = 0, max = 1, value = 0.5, 
-                        animate=animationOptions(interval = 500, loop = T)))),
+                        animate=animationOptions(interval = 700, loop = T)))),
       conditionalPanel(crossSectionTab,
-          numericInput("ratio", label = "Minority ratio", value = 0.5,
-                      min = 0.1, max = 0.9, step = 0.05)),
+            sliderInput("ratio", label = "Minority ratio", value = 0.5,
+                      min = 0.1, max = 0.9, step = 0.05,
+                      animate=animationOptions(interval = 700, loop = T))),
       conditionalPanel(tetrahedronTab,
           selectInput("resolution", label = "Resolution [points]",
                      choices = list(969, 6545, 47905, 156849))),
@@ -58,7 +60,8 @@ shinyUI(fluidPage(
           colourInput("naColor", "Undefined value color", "magenta")),
       conditionalPanel(tetrahedronTab,
                        sliderInput("pointSize", label = "Point size", min = 1, max = 16, value = 8),
-                       sliderInput("layers", label = "Layers (internal view)", min = 0, max = 1, value = 1, step = 0.0625, ticks = F)),
+                       sliderInput("layers", label = "Layers (internal view)", min = 0, max = 1, value = 1, step = 0.0625, ticks = F, 
+                                   animate=animationOptions(interval = 700, loop = T))),
       conditionalPanel(nonMeasureTab,
           checkboxInput("showTitle", label = "Show measure name on plot", value = TRUE),
           checkboxInput("showLabels", label = "Show labels", value = TRUE)),
@@ -86,15 +89,15 @@ shinyUI(fluidPage(
     
     # Generated 3d plot
     mainPanel(
-      tabsetPanel(
+      tabsetPanel(id = "tabs",
         tabPanel("Tetrahedron", div(class = "plot-container",
-                                    tags$img(src = "img/spinner.gif", id = "rgl-spinner"),
+                                    tags$img(src = "img/spinner.svg", id="rgl-spinner"),
                                     tags$span("Drag to rotate, scroll to zoom", class="info"),
                                     rglwidgetOutput("rglPlot", width = "550px", height = "550px"))),
         tabPanel("Cross-sections",
                  div(class = "hover-plot-wrapper plot-container",
                      tags$span("Hover to display value", class="info"),
-                     tags$img(src = "img/spinner.gif", id = "cross-section-spinner"),
+                     tags$img(src = "img/spinner.svg", id = "cross-section-spinner"),
                      plotOutput("crossSectionPlot", width = "550px", height = "550px",
                                 hover = hoverOpts(id ="plotHover", delay = 150, delayType = "debounce")),
                      uiOutput("hoverInfo"))),
