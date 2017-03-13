@@ -26,6 +26,10 @@ h1 {
   display: block;
 }
 
+.help {
+  font-size: 16px;
+}
+
 .measures {
   font-size: 16px;
 }

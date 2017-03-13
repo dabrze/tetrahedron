@@ -49,7 +49,7 @@ $(document).ready(function(){
         if ($("html").hasClass("shiny-busy") || $("#rglPlot > canvas")[0] === undefined) {
           $("#rgl-spinner").show();
         }
-      }, 700);
+      }, 1200);
     } else {
       $("#rgl-spinner").hide();
     }
@@ -65,7 +65,7 @@ $(document).ready(function(){
         if ($("#crossSectionPlot").hasClass("recalculating") || $("#crossSectionPlot > img")[0] === undefined) {
           $("#cross-section-spinner").show();
         }
-      }, 700);
+      }, 1200);
     } else {
       $("#cross-section-spinner").hide();
     }

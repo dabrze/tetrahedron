@@ -178,19 +178,20 @@ shinyServer(function(input, output, session) {
       session$sendInputMessage("ctrlplot3d",list(cmd="getpar3d", rglwidgetId="rglPlot"))
     } else {
       rglObserver$resume()
+      tabObserver$resume()
     }
   })
   
   # We don't want to recalculate the tetrahedron when other tabs are active
   # (we have to this manually since we're controlling the rgl scene with an observer)
-  observe({
+  tabObserver <- observe({
     activeTab <- input$tabs
     if (activeTab == "Tetrahedron") {
       rglObserver$resume()
     } else {
       rglObserver$suspend()
     }
-  })
+  }, suspended = TRUE)
   
   # Plot measure visualization
   output$rglPlot <- renderRglwidget({

@@ -6,7 +6,8 @@ source("measures.R")
 tetrahedronTab <- "$('li.active a').first().html()==='Tetrahedron'"
 crossSectionTab <- "$('li.active a').first().html()==='Cross-sections'"
 measureTab <- "$('li.active a').first().html()==='Measure definitions'"
-nonMeasureTab <- "$('li.active a').first().html()!=='Measure definitions'"
+helpTab <- "$('li.active a').first().html()==='Help'"
+nonMeasureTab <- "$('li.active a').first().html()!=='Measure definitions'&&$('li.active a').first().html()!=='Help'"
 
 rglwgtctrl <- function(inputId, value="", nrows, ncols) {
   tagList(
@@ -39,10 +40,10 @@ shinyUI(fluidPage(
           textInput("customMeasure", label ="Custom function", value = "", placeholder="Write an expression..."),
           conditionalPanel("output.hasAlpha == true",
             sliderInput("alpha", label="Measure parameter (alpha)", min = 0, max = 1, value = 0.5, 
-                        animate=animationOptions(interval = 700, loop = T))),
+                        animate=animationOptions(interval = 800, loop = T))),
           conditionalPanel("output.hasBeta == true",
             sliderInput("beta", label="Measure parameter (beta)", min = 0, max = 1, value = 0.5, 
-                        animate=animationOptions(interval = 700, loop = T)))),
+                        animate=animationOptions(interval = 800, loop = T)))),
       conditionalPanel(crossSectionTab,
             sliderInput("ratio", label = "Minority ratio", value = 0.5,
                       min = 0.1, max = 0.9, step = 0.05,
@@ -61,7 +62,7 @@ shinyUI(fluidPage(
       conditionalPanel(tetrahedronTab,
                        sliderInput("pointSize", label = "Point size", min = 1, max = 16, value = 8),
                        sliderInput("layers", label = "Layers (internal view)", min = 0, max = 1, value = 1, step = 0.0625, ticks = F, 
-                                   animate=animationOptions(interval = 700, loop = T))),
+                                   animate=animationOptions(interval = 800, loop = T))),
       conditionalPanel(nonMeasureTab,
           checkboxInput("showTitle", label = "Show measure name on plot", value = TRUE),
           checkboxInput("showLabels", label = "Show labels", value = TRUE)),
@@ -84,6 +85,8 @@ shinyUI(fluidPage(
                        p("Interestingness measures are defined based on a contingency table summarizing examples
                          satisfying and not satisfying the evidence or hypothesis of a rule."),
                        p("The remaining measures are based on a two-by-two matrix: \\(\\begin{bmatrix}a & c\\\\b & d\\end{bmatrix}\\).")),
+      conditionalPanel(helpTab,
+                       includeMarkdown("www/helpContents.md")),
       rglwgtctrl('ctrlplot3d')
     ),
     
@@ -103,7 +106,10 @@ shinyUI(fluidPage(
                      uiOutput("hoverInfo"))),
         tabPanel("Measure definitions",
                  withMathJax(),
-                 div(includeMarkdown("www/measures.md"), class="measures"))
+                 div(includeMarkdown("www/measures.md"), class="measures")),
+        tabPanel("Help",
+                 withMathJax(),
+                 div(includeMarkdown("www/help.md"), class="help"))
       )
     )
   ),
