@@ -21,6 +21,7 @@ shinyServer(function(input, output, session) {
   })
   
   getMeasureValues <- reactive({
+    validateInputs()
     points <- getTetrahedronPoints()
     a <- points[,1]
     b <- points[,2]
@@ -38,6 +39,7 @@ shinyServer(function(input, output, session) {
   })
   
   getCrosssectionMeasureValues <- reactive({
+    validateInputs()
     points <- resolutions[["47905"]]
     a <- points[,1]
     b <- points[,2]
@@ -170,6 +172,16 @@ shinyServer(function(input, output, session) {
                                           skipRedraw = FALSE))
   }, suspended = TRUE)
   
+  output$tetrahedronInfo <- renderText({
+    validateInputs()
+    "Drag to rotate, scroll to zoom"
+  })
+  
+  output$crossSectionInfo <- renderText({
+    validateInputs()
+    "Hover to display value"
+  })
+  
   # Periodically get view parameters from browser, if we get them we know that rgl is working
   observe({
     par <- isolate(getBrowserPar3d(input))
@@ -201,7 +213,6 @@ shinyServer(function(input, output, session) {
   
   # Plot cross-section
   output$crossSectionPlot <- renderPlot({
-      validateInputs()
       getCrossSectionPlot()
     },
     width = reactive({validateInputs(); nrow(getCrossSection())*csMult}),
@@ -210,7 +221,6 @@ shinyServer(function(input, output, session) {
   
   # Cross-section tooltip
   output$hoverInfo <- renderUI({
-    validateInputs()
     hover <- input$plotHover
     data <- getCrossSection()
     point <- nearPoints(expand.grid(1:nrow(data)/nrow(data), 1:ncol(data)/ncol(data)), hover, 
@@ -308,12 +318,12 @@ shinyServer(function(input, output, session) {
     a=1; b=1; c=1; d=1; n=4; p1=1; p2=1;
     
     shiny::validate(
-      need(input$customMeasure == "" || grepl("^[a-dp0-9 n().^%*/+-]+$", input$customMeasure),
-           "In custom functions, please use only: a, b, c, d, n, p1, p2, numbers, and math operators. For example, try: a/(b-c)."),
       need(input$customMeasure == "" ||
              tryCatch({ eval(parse(text=input$customMeasure)); TRUE },
                       error = function(e) { FALSE }), 
            "Invalid expression in custom function."),
+      need(input$customMeasure == "" || grepl("^[a-dp0-9 n().^%*/+-]+$", input$customMeasure),
+           "In custom functions, please use only: a, b, c, d, n, p1, p2, numbers, and math operators. For example, try: a/(b-c)."),
       need(input$ratio >= 0.1 && input$ratio <= 0.9, 
            "The minority ratio has to be between 0.1 and 0.9 to properly display the image.")
     )

@@ -87,3 +87,5 @@ $$\begin{align}
 				\dfrac{P(H|E)}{P(H)}-1=\dfrac{ad-bc}{(a+c)(a+b)} \quad \text{in case of disconfirmation}\\\\
 			\end{cases}
 \end{align}$$
+
+<a href="#" onclick="$('body,html').animate({scrollTop : 0}, 500);" class="return-to-top" title="Scroll to top"><i class="fa fa-chevron-up"></i></a>

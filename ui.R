@@ -24,7 +24,7 @@ shinyUI(fluidPage(
   
   # Header
   fluidRow(
-    column(width = 8, includeMarkdown("www/header.md")),
+    column(width = 8, includeMarkdown("www/header.md"), class="header"),
     column(width = 4, a(img(src="img/put_logo.png", id="logo"), href="http://www.put.poznan.pl/"))
   ),
   br(),
@@ -84,9 +84,11 @@ shinyUI(fluidPage(
                        p("All visualized classification measures are defined based on a two-class confusion matrix."),
                        p("Interestingness measures are defined based on a contingency table summarizing examples
                          satisfying and not satisfying the evidence or hypothesis of a rule."),
-                       p("The remaining measures are based on a two-by-two matrix: \\(\\begin{bmatrix}a & c\\\\b & d\\end{bmatrix}\\).")),
+                       p("The remaining measures are based on a two-by-two matrix: \\(\\begin{bmatrix}a & c\\\\b & d\\end{bmatrix}\\)."),
+                       class="measures"),
       conditionalPanel(helpTab,
-                       includeMarkdown("www/helpContents.md")),
+                       includeMarkdown("www/helpContents.md"),
+                       class="measures"),
       rglwgtctrl('ctrlplot3d')
     ),
     
@@ -95,13 +97,13 @@ shinyUI(fluidPage(
       tabsetPanel(id = "tabs",
         tabPanel("Tetrahedron", div(class = "plot-container",
                                     tags$img(src = "img/spinner.svg", id="rgl-spinner"),
-                                    tags$span("Drag to rotate, scroll to zoom", class="info"),
+                                    tags$span(textOutput("tetrahedronInfo"), class="info"),
                                     rglwidgetOutput("rglPlot", width = "550px", height = "550px"))),
         tabPanel("Cross-sections",
                  div(class = "hover-plot-wrapper plot-container",
-                     tags$span("Hover to display value", class="info"),
+                     tags$span(textOutput("crossSectionInfo"), class="info"),
                      tags$img(src = "img/spinner.svg", id = "cross-section-spinner"),
-                     plotOutput("crossSectionPlot", width = "550px", height = "550px",
+                     plotOutput("crossSectionPlot", width = "400px", height = "400px",
                                 hover = hoverOpts(id ="plotHover", delay = 150, delayType = "debounce")),
                      uiOutput("hoverInfo"))),
         tabPanel("Measure definitions",
