@@ -144,17 +144,33 @@ shinyServer(function(input, output, session) {
     
     if (input$showLabels) {
       title(main=ifelse(input$showTitle, getPlotTitle(), ""), line=2)
-      mtext(expression(bar("FP")), side=1, line=0.5)
-      mtext(expression("TPFP"), side=1, line=0.5, adj=-0.05)
-      mtext(expression("FNFP"), side=1, line=0.5, adj=1.05)
+      cls <- (isClassificationMeasure(input$measure) && input$customMeasure == "")
       
-      mtext(expression(bar("TP")), side=2, line=0.5, las=1)
-      
-      mtext(expression(bar("TN")), side=3, line=0.5)
-      mtext(expression("TPTN"), side=3, line=0.5, adj=-0.05)
-      mtext(expression("FNTN"), side=3, line=0.5, adj=1.05)
-      
-      mtext(expression(bar("FN")), side=4, line=0.5, las=1)
+      if (cls) {
+        mtext(expression(bar("FP")), side=1, line=0.5)
+        mtext(expression("TPFP"), side=1, line=0.5, adj=-0.05)
+        mtext(expression("FNFP"), side=1, line=0.5, adj=1.05)
+        
+        mtext(expression(bar("TP")), side=2, line=0.5, las=1)
+        
+        mtext(expression(bar("TN")), side=3, line=0.5)
+        mtext(expression("TPTN"), side=3, line=0.5, adj=-0.05)
+        mtext(expression("FNTN"), side=3, line=0.5, adj=1.05)
+        
+        mtext(expression(bar("FN")), side=4, line=0.5, las=1)
+      } else {
+        mtext(expression(bar("B")), side=1, line=0.5)
+        mtext(expression("AB"), side=1, line=0.5, adj=-0.05)
+        mtext(expression("CB"), side=1, line=0.5, adj=1.05)
+        
+        mtext(expression(bar("A")), side=2, line=0.5, las=1)
+        
+        mtext(expression(bar("D")), side=3, line=0.5)
+        mtext(expression("AD"), side=3, line=0.5, adj=-0.05)
+        mtext(expression("CD"), side=3, line=0.5, adj=1.05)
+        
+        mtext(expression(bar("C")), side=4, line=0.5, las=1)
+      }
       
       text(5, par("usr")[4], "X", srt = 30, xpd = TRUE, pos = 3)
     } else if (input$showTitle) {

@@ -49,39 +49,56 @@ button. You can try out both actions on the tetrahedron below:
 
 You can configure the visualization by using the inputs available in the left sidebar (upper panel on small screens). The basic configuration options involve:
 
-- **Selecting a predefined measure**: You can select one of several predefined measures grouped in to three categories: *Classification*, *Interestingness*, and *Misc*. Just pick one of the measures names from the *Measure* combo box. If you know the name of the measure you are looking for, you can also start typing the name in the combo box to find the measure without scrolling through all the measures. The measures are sorted alphabetically within each of the three groups. Formulas for the predefined measures are available in the *Measure definitions* tab.
-- **Visualizing a custom measure**: It is possible to define a custom measure to be visualized. For this purpose use the *Custom function* and write the desired formula. Within the formula you can use variables $a$, $b$, $c$, $d$, $n$, $p1$, $p2$, numbers, and math operators. For example, a valid measure definition would be: $a/(b-c)$. Variables $a$, $b$, $c$, $d$ correspond to variables with the same names commonly used to define rule interestingness measures. For classification $TP=a$, $FP=b$, $FP=c$, $TN=d$, therefore, classification accuracy would be defined as: $(a+d)/(a+b+c+d)$. The variable $n$ is the same as $a+b+c+d$, therefore accuracy might as well be defined as $(a+d)/n$. The last to variables ($p1$ and $p2$) can be used to parameterize the function. The application allows the user to [animate](#help-animation) parameter changes, which can be useful when trying to understand the effects of using different parameter values. A popular parameterized classification measure is $F_{\beta}$ which could be defined as: $(1+100*p2*p2)*a/(a+c)*a/(a+b) / (100*p2*p2*a/(a+b) + a/(a+c))$. *The 100 in the last example is used to scale the values of $p2$ from 0 to 10 instead of from 0 to 1.*
-- **Defining the tetrahedron resolution**: The *Resolution [points]* combo box gives the possibility of changing the number of points used to render the tetrahedron. Smaller resolutions yield faster rendering (useful when [animating the tetrahedron](#help-animation)), whereas higher resolutions depict measure values with more detail and can be useful for making [snapshots](#help-save). The highest resolution (156849) is particularly demanding and can take some time to render.
-- **Selecting a color palette**: Measure values can be visualized using one of 12 predefined color palettes. Most of the palettes are based on diverging and sequential color schemes from http://colorbrewer2.org.
-- **Setting the color used for undefined values**: Undefined values (NaNs) can be visualized using a color defined by the user. It is best if the selected color differs from those in the used in the palette.
-- **Selecting the point size**: It is possible to change size of points in the tetrahedron. This gives a way of looking through the layers of tetrahedron or creating solid planes.
-- **Selecting an internal view of the tetrahedron**: This options allows the user to hide the external layers and take a look inside the tetrahedron. This option can be [animated](#help-animation).
-- **Defining the amount of text on the visualization**: Options *Show measure name on plot*, *Show labels*, and *Show tetrahedron wireframe* change the amount of additional data plotted next to the tetrahedron.
+- **Selecting a predefined measure**: You can select one of several predefined measures grouped in to three categories: *Classification*, *Interestingness*, and *Misc*. Just pick one of the measures names from the *Measure* combo box. If you know the name of the measure you are looking for, you can also start typing the name in the combo box to find the measure without scrolling through all the measures. The measures are sorted alphabetically within each of the three groups. Formulas for the predefined measures are available in the *Measure definitions* tab. <br />![Predefined measure](img/predefined_measure.png)
+- **Visualizing a custom measure**: It is possible to define a custom measure to be visualized. For this purpose use the *Custom function* and write the desired formula. Within the formula you can use variables $a$, $b$, $c$, $d$, $n$, $p1$, $p2$, numbers, and math operators. For example, a valid measure definition would be: $a/(b-c)$. Variables $a$, $b$, $c$, $d$ correspond to variables with the same names commonly used to define rule interestingness measures. For classification $TP=a$, $FP=b$, $FP=c$, $TN=d$, therefore, classification accuracy would be defined as: $(a+d)/(a+b+c+d)$. The variable $n$ is the same as $a+b+c+d$, therefore accuracy might as well be defined as $(a+d)/n$. The last to variables ($p1$ and $p2$) can be used to parameterize the function. The application allows the user to [animate](#help-animation) parameter changes, which can be useful when trying to understand the effects of using different parameter values. A popular parameterized classification measure is $F_{\beta}$ which could be defined as: $(1+100*p2*p2)*a/(a+c)*a/(a+b) / (100*p2*p2*a/(a+b) + a/(a+c))$. *The 100 in the last example is used to scale the values of $p2$ from 0 to 10 instead of from 0 to 1.*<br />![Custom measure](img/custom_measure.png)
+- **Defining the tetrahedron resolution**: The *Resolution [points]* combo box gives the possibility of changing the number of points used to render the tetrahedron. Smaller resolutions yield faster rendering (useful when [animating the tetrahedron](#help-animation)), whereas higher resolutions depict measure values with more detail and can be useful for making [snapshots](#help-save). The highest resolution (156849) is particularly demanding and can take some time to render.<br />![Resolution](img/resolution.png)
+- **Selecting a color palette**: Measure values can be visualized using one of 12 predefined color palettes. Most of the palettes are based on diverging and sequential color schemes from http://colorbrewer2.org.<br />![Palette](img/palette.png)
+- **Setting the color used for undefined values**: Undefined values (NaNs) can be visualized using a color defined by the user. It is best if the selected color differs from those in the used in the palette.<br />![Undefined value color](img/undefined.png)
+- **Selecting the point size**: It is possible to change size of points in the tetrahedron. This gives a way of looking through the layers of tetrahedron or creating solid planes.<br />![Point size](img/point_size.png)
+- **Selecting an internal view of the tetrahedron**: This options allows the user to hide the external layers and take a look inside the tetrahedron. This option can be [animated](#help-animation).<br />![Internal view](img/layers.png)
+- **Defining the amount of text on the visualization**: Options *Show measure name on plot*, *Show labels*, and *Show tetrahedron wireframe* change the amount of additional data plotted next to the tetrahedron.<br />![Text options](img/text.png)
 
 <a id='help-save'></a>
 ### 4. Snapshots and saving the tetrahedron to an html file
 
-Work in progress...
+The tetrahedron is rendered using WebGL and there are two ways of exporting the visualization: to a static png image or to an html file with an interactive WebGL object. Both options are available via buttons in the sidebar.
+
+![Save buttons](img/save.png)
+
+The static snapshot saves the current view of the tetrahedron, therefore rotating and making several snapshots may be useful when trying to depict the entire tetrahedron. The exported html file, on the other hand, is interactive and can be rotated and zoomed. The html file can be embedded in websites or html-based presentations. If you want to make the tetrahedron smaller or larger, look for `"viewer":` and `"browser:"` properties in the `<script type="application/htmlwidget-sizing" ...>` tag of the exported html.
 
 <a id='help-animation'></a>
 ### 5. Animations
 
-Work in progress...
+Some of the application options can be animated. These options can change the visualization parameters automatically in constant intervals creating an animation. To trigger such an animation look for the <i class="glyphicon glyphicon-play" style="color: #337ab7"></i> button  underneath sliders. Animated options include: *Layers (internal view)*, *Minority ratio*,  *Measure parameter (alpha)*, and *Measure parameter (beta)*.
+
+![Animated parameters](img/animate.png)
 
 <a id='help-parameters'></a>
 ### 6. Parameterized measures
 
-Work in progress...
+Selected predefined measures and custom measures can be parameterized. A parameterized measure contains a user defined parameter in its formula. The parameters are named alpha and beta and be added to formulas in custom measures using variables $p1$ and $p2$, respectively. The alpha and beta parameters are animated options. Predefined parameterized measures include: *IBA(G-mean)*, *IBA(F1 score)*, *IBA(Fb-measure)*, *IBA(Accuracy)*, *Fb-measure*, *c1*, *c2*.
+
+![Parameterized measure](img/parameters.png)
 
 <a id='help-cross-sections'></a>
 ### 7. Cross-sections
 
-Work in progress...
+A useful way of visualizing measure values can also be achieved be cutting the tetrahedron with a plane and analyzing the obtained slice. There are many possible ways of cutting the tetrahedron, but in this application we highlight cross-sections shown on the figure below.
+
+![Cross-sections](img/crosssection.png)
+
+The indicated cross-sections are of particular interest in the context of analyzing classification measures for class imbalance problems. Traversing the tetrahedron alongside the vertical axis (up-down in Fig.~\ref{fig:cross-sections-skeleton}) corresponds to changing the proportions between sums $\mathit{TP}+\mathit{FN} = P$ and $\mathit{FP}+\mathit{TN} = N$. This has an important implication, because these two values specify the probability distribution of the actual classes. If  $P = N$, then a situation of balanced classes is reproduced; otherwise the classes are imbalanced.
+
+How a measure behaves for a particular class proportion may be visualized by producing a cross-section of the tetrahedron with a horizontal plane that cuts its vertical height. The above figure shows two cross-sections, one at $P/n = 1/2$ (class balance, middle plot) and one at $P/n = 1/6$ (positive class as the minority class, right plot). It is worth noting that the proportion of the rectangle's side lengths follows that of $P$ (the horizontal side) and $N$ (the vertical side). 
 
 <a id='help-cross-section-conf'></a>
 ### 8. Configuring cross-sections
 
-Work in progress...
+Cross-sections mostly have same [configuration options](#help-conf) as the tetrahedron. The additional options are:
+
+- **Setting the minority ratio**: This option picks the height at which the cross-section will be performed. A minority ratio value of 0.5 corresponds to creating a cross-section when one of the classes encompasses 50% of the dataset, whereas a value of 0.1 corresponds to one class having 10% of the examples and the second class having 90% of the examples. The minority ratio is similar to the *skew-ratio*. This parameter can be animated.<br />![Minority ratio](img/minority_ratio.png)
+- **Ploting the countours of measure values**: Setting this options a contour plot as an additional layer to the plot. This an alternative way of visualizing the "shape" of measure values, often denoted as *iso-lines*.<br />![Contour plot](img/contour.png)
 
 <a id='help-contact'></a>
 ### 9. Contact
