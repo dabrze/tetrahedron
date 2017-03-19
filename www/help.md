@@ -11,7 +11,7 @@ A confusion matrix for binary classification consists of four entries: $\mathit{
 | **Negative**  | $\mathit{FP}$  | $\mathit{TN}$ |  $N$ |
 | **total**  |  $\widehat{P}$ | $\widehat{N}$  | $n$  |
 
-The *barycentric coordinate system* is a coordinate system in which point locations are specified relatively to vertices of a simplex (a triangle, tetrahedron, etc.). A 4D barycentric coordinate system is a tetrahedron, where each dimension is represented as one of the four vertices. Choosing vectors that represent $\mathit{TP}$, $\mathit{FP}$, $\mathit{FN}$, $\mathit{TN}$ as vertices of a regular tetrahedron in a 3D space, one arrives at a barycentric coordinate system depicted below.
+The *barycentric coordinate system* is a coordinate system in which point locations are specified relatively to hyper-sides (sides of the triangle, faces of the tetrahedron, etc.) of a simplex (a triangle, tetrahedron, etc.). A 4D barycentric coordinate system is a tetrahedron, where each dimension is represented as one of the four vertices. Choosing vectors that represent $\mathit{TP}$, $\mathit{FP}$, $\mathit{FN}$, $\mathit{TN}$ as vertices of a regular tetrahedron in a 3D space, one arrives at a barycentric coordinate system depicted below.
 
 ![A skeleton visualization of the tetrahedron with four exemplary points](img/tetrahedron.png)
 
@@ -45,15 +45,15 @@ button. You can try out both actions on the tetrahedron below:
 <script type="application/htmlwidget-sizing" data-for="htmlwidget-5d8052eefe02c448a8bf">{"viewer":{"width":450,"height":350,"padding":15,"fill":true},"browser":{"width":450,"height":350,"padding":0,"fill":false}}</script>
 
 <a id='help-conf'></a>
-### 3. Configuring the tetrahedron
+### 3. Configuring the visualization
 
 You can configure the visualization by using the inputs available in the left sidebar (upper panel on small screens). The basic configuration options involve:
 
 - **Selecting a predefined measure**: You can select one of several predefined measures grouped in to three categories: *Classification*, *Interestingness*, and *Misc*. Just pick one of the measures names from the *Measure* combo box. If you know the name of the measure you are looking for, you can also start typing the name in the combo box to find the measure without scrolling through all the measures. The measures are sorted alphabetically within each of the three groups. Formulas for the predefined measures are available in the *Measure definitions* tab. <br />![Predefined measure](img/predefined_measure.png)
-- **Visualizing a custom measure**: It is possible to define a custom measure to be visualized. For this purpose use the *Custom function* and write the desired formula. Within the formula you can use variables $a$, $b$, $c$, $d$, $n$, $p1$, $p2$, numbers, and math operators. For example, a valid measure definition would be: $a/(b-c)$. Variables $a$, $b$, $c$, $d$ correspond to variables with the same names commonly used to define rule interestingness measures. For classification $TP=a$, $FP=b$, $FP=c$, $TN=d$, therefore, classification accuracy would be defined as: $(a+d)/(a+b+c+d)$. The variable $n$ is the same as $a+b+c+d$, therefore accuracy might as well be defined as $(a+d)/n$. The last to variables ($p1$ and $p2$) can be used to parameterize the function. The application allows the user to [animate](#help-animation) parameter changes, which can be useful when trying to understand the effects of using different parameter values. A popular parameterized classification measure is $F_{\beta}$ which could be defined as: $(1+100*p2*p2)*a/(a+c)*a/(a+b) / (100*p2*p2*a/(a+b) + a/(a+c))$. *The 100 in the last example is used to scale the values of $p2$ from 0 to 10 instead of from 0 to 1.*<br />![Custom measure](img/custom_measure.png)
+- **Visualizing a custom measure**: It is possible to define a custom measure to be visualized. For this purpose use the *Custom function* and write the desired formula. Within the formula you can use variables $a$, $b$, $c$, $d$, $n$, $p1$, $p2$, numbers, and math operators (+, -, \*, /, \^). For example, a valid measure definition would be: $a/(b-c)$. Variables $a$, $b$, $c$, $d$ correspond to variables with the same names commonly used to define rule interestingness measures. For classification $TP=a$, $FP=b$, $FP=c$, $TN=d$, therefore, classification accuracy would be defined as: $(a+d)/(a+b+c+d)$. The variable $n$ is the same as $a+b+c+d$, therefore accuracy might as well be defined as $(a+d)/n$. The last two variables ($p1$ and $p2$) can be used to parameterize the function. The application allows the user to [animate](#help-animation) parameter changes, which can be useful when trying to understand the effects of using different parameter values. A popular parameterized classification measure is $F_{\beta}$ which could be defined as: $(1+(10*p1)*(10*p1))*a/(a+c)*a/(a+b) / ((10*p1)*(10*p1)*a/(a+b) + a/(a+c))$. *The 100 in the last example rescale the range of $p1$ from (the original) [0,1] to [0,10].*<br />![Custom measure](img/custom_measure.png)
 - **Defining the tetrahedron resolution**: The *Resolution [points]* combo box gives the possibility of changing the number of points used to render the tetrahedron. Smaller resolutions yield faster rendering (useful when [animating the tetrahedron](#help-animation)), whereas higher resolutions depict measure values with more detail and can be useful for making [snapshots](#help-save). The highest resolution (156849) is particularly demanding and can take some time to render.<br />![Resolution](img/resolution.png)
 - **Selecting a color palette**: Measure values can be visualized using one of 12 predefined color palettes. Most of the palettes are based on diverging and sequential color schemes from http://colorbrewer2.org.<br />![Palette](img/palette.png)
-- **Setting the color used for undefined values**: Undefined values (NaNs) can be visualized using a color defined by the user. It is best if the selected color differs from those in the used in the palette.<br />![Undefined value color](img/undefined.png)
+- **Setting the color used for undefined values**: Undefined values (NaNs) can be visualized using a color defined by the user. It is best if the selected color differs from those used in the palette.<br />![Undefined value color](img/undefined.png)
 - **Selecting the point size**: It is possible to change size of points in the tetrahedron. This gives a way of looking through the layers of tetrahedron or creating solid planes.<br />![Point size](img/point_size.png)
 - **Selecting an internal view of the tetrahedron**: This options allows the user to hide the external layers and take a look inside the tetrahedron. This option can be [animated](#help-animation).<br />![Internal view](img/layers.png)
 - **Defining the amount of text on the visualization**: Options *Show measure name on plot*, *Show labels*, and *Show tetrahedron wireframe* change the amount of additional data plotted next to the tetrahedron.<br />![Text options](img/text.png)
@@ -70,14 +70,14 @@ The static snapshot saves the current view of the tetrahedron, therefore rotatin
 <a id='help-animation'></a>
 ### 5. Animations
 
-Some of the application options can be animated. These options can change the visualization parameters automatically in constant intervals creating an animation. To trigger such an animation look for the <i class="glyphicon glyphicon-play" style="color: #337ab7"></i> button  underneath sliders. Animated options include: *Layers (internal view)*, *Minority ratio*,  *Measure parameter (alpha)*, and *Measure parameter (beta)*.
+Some of the application options can be animated. These options can change the visualization parameters automatically in constant intervals creating an animation. To trigger such an animation look for the <i class="glyphicon glyphicon-play" style="color: #337ab7"></i> button  underneath sliders. Animated options include: *Layers (internal view)*, *Minority ratio*, *Measure parameter (alpha)*, *Measure parameter (beta)*,  *Measure parameter (p1)*, *Measure parameter (p2)*.
 
 ![Animated parameters](img/animate.png)
 
 <a id='help-parameters'></a>
 ### 6. Parameterized measures
 
-Selected predefined measures and custom measures can be parameterized. A parameterized measure contains a user defined parameter in its formula. The parameters are named alpha and beta and be added to formulas in custom measures using variables $p1$ and $p2$, respectively. The alpha and beta parameters are animated options. Predefined parameterized measures include: *IBA(G-mean)*, *IBA(F1 score)*, *IBA(Fb-measure)*, *IBA(Accuracy)*, *Fb-measure*, *c1*, *c2*.
+Selected predefined measures and custom measures can be parameterized. A parameterized measure contains a user defined parameter in its formula. Predefined parameters are named alpha and beta, whereas in custom measures parameters can be added to formulas using variables $p1$ and $p2$, respectively. The alpha, beta, p1, p2 parameters are animated options. Predefined parameterized measures include: *IBA(G-mean)*, *IBA(F1 score)*, *IBA(Fb-measure)*, *IBA(Accuracy)*, *Fb-measure*, *c1*, *c2*.
 
 ![Parameterized measure](img/parameters.png)
 
@@ -88,7 +88,7 @@ A useful way of visualizing measure values can also be achieved be cutting the t
 
 ![Cross-sections](img/crosssection.png)
 
-The indicated cross-sections are of particular interest in the context of analyzing classification measures for class imbalance problems. Traversing the tetrahedron alongside the vertical axis (up-down in Fig.~\ref{fig:cross-sections-skeleton}) corresponds to changing the proportions between sums $\mathit{TP}+\mathit{FN} = P$ and $\mathit{FP}+\mathit{TN} = N$. This has an important implication, because these two values specify the probability distribution of the actual classes. If  $P = N$, then a situation of balanced classes is reproduced; otherwise the classes are imbalanced.
+The indicated cross-sections are of particular interest in the context of analyzing classification measures for class imbalance problems. Traversing the tetrahedron alongside the vertical axis (up-down in the above figure) corresponds to changing the proportions between sums $\mathit{TP}+\mathit{FN} = P$ and $\mathit{FP}+\mathit{TN} = N$. This has an important implication, because these two values specify the probability distribution of the actual classes. If  $P = N$, then a situation of balanced classes is reproduced; otherwise the classes are imbalanced.
 
 How a measure behaves for a particular class proportion may be visualized by producing a cross-section of the tetrahedron with a horizontal plane that cuts its vertical height. The above figure shows two cross-sections, one at $P/n = 1/2$ (class balance, middle plot) and one at $P/n = 1/6$ (positive class as the minority class, right plot). It is worth noting that the proportion of the rectangle's side lengths follows that of $P$ (the horizontal side) and $N$ (the vertical side). 
 
@@ -97,7 +97,7 @@ How a measure behaves for a particular class proportion may be visualized by pro
 
 Cross-sections mostly have same [configuration options](#help-conf) as the tetrahedron. The additional options are:
 
-- **Setting the minority ratio**: This option picks the height at which the cross-section will be performed. A minority ratio value of 0.5 corresponds to creating a cross-section when one of the classes encompasses 50% of the dataset, whereas a value of 0.1 corresponds to one class having 10% of the examples and the second class having 90% of the examples. The minority ratio is similar to the *skew-ratio*. This parameter can be animated.<br />![Minority ratio](img/minority_ratio.png)
+- **Setting the minority ratio**: This option picks the height at which the cross-section will be performed. A minority ratio value of 0.5 corresponds to creating a cross-section when both of the classes encompass 50% of the dataset, whereas a value of 0.1 corresponds to one class having 10% of the examples and the second class having 90% of the examples. The minority ratio is similar to the *skew-ratio*. This parameter can be animated.<br />![Minority ratio](img/minority_ratio.png)
 - **Ploting the countours of measure values**: Setting this options a contour plot as an additional layer to the plot. This an alternative way of visualizing the "shape" of measure values, often denoted as *iso-lines*.<br />![Contour plot](img/contour.png)
 
 <a id='help-contact'></a>

@@ -2,7 +2,7 @@
 
 1. [Quick theoretical introduction](#help-intro)
 2. [Rotating and zooming the tetrahedron](#help-moving)
-3. [Configuring the tetrahedron](#help-conf)
+3. [Configuring the visualization](#help-conf)
 4. [Snapshots and saving the tetrahedron to an html file](#help-save)
 5. [Animations](#help-animation)
 6. [Parameterized measures](#help-parameters)

@@ -34,7 +34,13 @@ shinyServer(function(input, output, session) {
     } else {
       p1=input$alpha
       p2=input$beta
-      eval(parse(text=input$customMeasure))
+      result <- eval(parse(text=input$customMeasure))
+      
+      if (length(result) == 1){
+        rep(result, length(a))
+      } else {
+        result
+      }
     }
   })
   
@@ -52,7 +58,13 @@ shinyServer(function(input, output, session) {
     } else {
       p1=input$alpha
       p2=input$beta
-      eval(parse(text=input$customMeasure))
+      result <- eval(parse(text=input$customMeasure))
+      
+      if (length(result) == 1){
+        rep(result, length(a))
+      } else {
+        result
+      }
     }
   })
   
@@ -105,11 +117,14 @@ shinyServer(function(input, output, session) {
     y <- (a+b-c-d)/n
     z <- (a-b+c-d)/n
     
-    pal <- colorRampPalette(getPallete(input$palette))(max(dense_rank(v), na.rm = T))
+    if (!all(is.na(v))) {
+      pal <- colorRampPalette(getPallete(input$palette))(max(dense_rank(v), na.rm = T))
+    } else {
+      pal <- colorRampPalette(getPallete(input$palette))(1)
+    }
     colors <- pal[dense_rank(v)]
     colors[is.na(colors)] <- input$naColor
     layers <- getSkinLayers(points, n, input$layers)
-    par <- isolate(getBrowserPar3d(input))
 
     mesh <- plot3d(x[layers], y[layers], z[layers], col = colors[layers],
                    box = F, axes = F, size = input$pointSize, 
@@ -130,15 +145,16 @@ shinyServer(function(input, output, session) {
   
   getCrossSectionPlot <- function(){
     cls <- (isClassificationMeasure(input$measure) && input$customMeasure == "")
+    crossection <- getCrossSection()
     
     par(mar=c(2,2.5,3,2.5))
-    if (input$showContour) {
+    if (input$showContour && length(unique(as.vector(crossection))) > 1) {
       contour <- list(col = "#FFFFFF", labcex = 1, lwd = 2, alpha = 0.75)
     } else {
       contour <- FALSE
     }
 
-    image2D(getCrossSection(), col=colorRampPalette(getPallete(input$palette))(256),
+    image2D(crossection, col=colorRampPalette(getPallete(input$palette))(256),
             NAcol=input$naColor, resfac = 4, contour=contour,
             colkey = FALSE, xaxt='n', yaxt='n', xlab="", ylab="")
     
@@ -162,13 +178,13 @@ shinyServer(function(input, output, session) {
         mtext(expression(bar("B")), side=1, line=0.5)
         mtext(expression("AB"), side=1, line=0.5, adj=-0.05)
         mtext(expression("CB"), side=1, line=0.5, adj=1.05)
-        
+
         mtext(expression(bar("A")), side=2, line=0.5, las=1)
-        
+
         mtext(expression(bar("D")), side=3, line=0.5)
         mtext(expression("AD"), side=3, line=0.5, adj=-0.05)
         mtext(expression("CD"), side=3, line=0.5, adj=1.05)
-        
+
         mtext(expression(bar("C")), side=4, line=0.5, las=1)
       }
       
@@ -289,12 +305,14 @@ shinyServer(function(input, output, session) {
         || grepl("p1", input$customMeasure)){
       if(input$customMeasure == ""){
         updateSliderInput(session, "alpha",
+                          label = "Measure parameter (alpha)",
                           min = measureParameters[[input$measure]]$alpha$min,
                           max = measureParameters[[input$measure]]$alpha$max,
                           value = measureParameters[[input$measure]]$alpha$default,
                           step = measureParameters[[input$measure]]$alpha$step)
       } else {
         updateSliderInput(session, "alpha",
+                          label = "Measure parameter (p1)",
                           min = 0,
                           max = 1,
                           value = 0.5,
@@ -312,12 +330,14 @@ shinyServer(function(input, output, session) {
         || grepl("p2", input$customMeasure)){
       if(input$customMeasure == ""){
         updateSliderInput(session, "beta",
+                          label = "Measure parameter (beta)",
                           min = measureParameters[[input$measure]]$beta$min,
                           max = measureParameters[[input$measure]]$beta$max,
                           value = measureParameters[[input$measure]]$beta$default,
                           step = measureParameters[[input$measure]]$beta$step)
       } else {
         updateSliderInput(session, "beta",
+                          label = "Measure parameter (p2)",
                           min = 0,
                           max = 1,
                           value = 0.5,
@@ -339,7 +359,7 @@ shinyServer(function(input, output, session) {
                       error = function(e) { FALSE }), 
            "Invalid expression in custom function."),
       need(input$customMeasure == "" || grepl("^[a-dp0-9 n().^%*/+-]+$", input$customMeasure),
-           "In custom functions, please use only: a, b, c, d, n, p1, p2, numbers, and math operators. For example, try: a/(b-c)."),
+           "In custom functions, please use only: a, b, c, d, n, p1, p2, numbers, and math operators (+, -, *, /, ^). For example, try: a/(b-c)."),
       need(input$ratio >= 0.1 && input$ratio <= 0.9, 
            "The minority ratio has to be between 0.1 and 0.9 to properly display the image.")
     )

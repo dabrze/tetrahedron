@@ -61,7 +61,7 @@ shinyUI(fluidPage(
           colourInput("naColor", "Undefined value color", "magenta")),
       conditionalPanel(tetrahedronTab,
                        sliderInput("pointSize", label = "Point size", min = 1, max = 16, value = 8),
-                       sliderInput("layers", label = "Layers (internal view)", min = 0, max = 1, value = 1, step = 0.0625, ticks = F, 
+                       sliderInput("layers", label = "Layers (internal view)", min = 0, max = 1, value = 1, step = 0.05, ticks = F, 
                                    animate=animationOptions(interval = 800, loop = T))),
       conditionalPanel(nonMeasureTab,
           checkboxInput("showTitle", label = "Show measure name on plot", value = TRUE),
