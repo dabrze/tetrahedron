@@ -243,6 +243,27 @@ shinyServer(function(input, output, session) {
     rglwidget()
   })
   
+  output$colorKeyPlot <- renderPlot({
+    v <- getMeasureValues()
+    
+    if (!all(is.na(v))) {
+      pal <- colorRampPalette(getPallete(input$palette))(max(dense_rank(v), na.rm = T))
+    } else {
+      pal <- colorRampPalette(getPallete(input$palette))(1)
+    }
+    n = length(pal)
+    minValue = min(v, na.rm = T)
+    maxValue = max(v, na.rm = T)
+    midValue = v[match(floor((max(dense_rank(v), na.rm = T) + min(dense_rank(v), na.rm = T))/2.0), dense_rank(v))]
+    decimalPlaces = 2
+    
+    par(mar = c(2,1,0,1))
+    image(1:n, 1, as.matrix(1:n), col = pal, xlab="", ylab = "", xaxt="n", yaxt = "n", bty = "n")
+    axis(1, at=c(1,floor((n+1)/2), n), labels=c(format(round(minValue, decimalPlaces), nsmall = decimalPlaces),
+                                     format(round(midValue, decimalPlaces), nsmall = decimalPlaces),
+                                     format(round(maxValue, decimalPlaces), nsmall = decimalPlaces)))
+  })
+  
   # Plot cross-section
   output$crossSectionPlot <- renderPlot({
       getCrossSectionPlot()
