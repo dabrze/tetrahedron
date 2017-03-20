@@ -1,3 +1,7 @@
+html {
+  overflow-y:scroll;
+}
+
 h1 {
 	font-weight: 700
 }
@@ -75,7 +79,7 @@ div.hover-plot-wrapper {
 	margin-bottom: 0;
 }
 
-#rglPlot {
+#rglPlot, #colorKeyPlot {
 	margin: 0 auto;
 }
 

@@ -259,9 +259,10 @@ shinyServer(function(input, output, session) {
     
     par(mar = c(2,1,0,1))
     image(1:n, 1, as.matrix(1:n), col = pal, xlab="", ylab = "", xaxt="n", yaxt = "n", bty = "n")
-    axis(1, at=c(1,floor((n+1)/2), n), labels=c(format(round(minValue, decimalPlaces), nsmall = decimalPlaces),
-                                     format(round(midValue, decimalPlaces), nsmall = decimalPlaces),
-                                     format(round(maxValue, decimalPlaces), nsmall = decimalPlaces)))
+    axis(1, at=c(1,floor((n+1)/2), n), lwd = 1.3, cex.axis=1.15,
+         labels=c(format(round(minValue, decimalPlaces), nsmall = decimalPlaces),
+                  format(round(midValue, decimalPlaces), nsmall = decimalPlaces),
+                  format(round(maxValue, decimalPlaces), nsmall = decimalPlaces)))
   })
   
   # Plot cross-section
