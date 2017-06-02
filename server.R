@@ -146,6 +146,16 @@ shinyServer(function(input, output, session) {
   getCrossSectionPlot <- function(){
     cls <- (isClassificationMeasure(input$measure) && input$customMeasure == "")
     crossection <- getCrossSection()
+    v <- getCrosssectionMeasureValues()
+    if (!all(is.na(v))) {
+      ranking <- dense_rank(v)
+      pal <- colorRampPalette(getPallete(input$palette))(max(ranking, na.rm = T))
+      subpal <- unique(ranking[v %in% crossection])
+      subpal <- subpal[order(subpal)]
+      pal <- pal[subpal]
+    } else {
+      pal <- colorRampPalette(getPallete(input$palette))(1)
+    }
     
     par(mar=c(2,2.5,3,2.5))
     if (input$showContour && length(unique(as.vector(crossection))) > 1) {
@@ -154,7 +164,7 @@ shinyServer(function(input, output, session) {
       contour <- FALSE
     }
 
-    image2D(crossection, col=colorRampPalette(getPallete(input$palette))(256),
+    image2D(crossection, col=pal,
             NAcol=input$naColor, resfac = 4, contour=contour,
             colkey = FALSE, xaxt='n', yaxt='n', xlab="", ylab="")
     

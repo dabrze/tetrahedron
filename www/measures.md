@@ -14,11 +14,11 @@ $$\begin{align}
   \text{F$_1$ score}& = 2 \cdot \frac{\text{recall} \cdot \text{precision}}{\text{precision} + \text{recall} }\\\\
   \text{False negative rate}& = \frac{\mathit{FN}}{\mathit{FN} +\mathit{TP}} = \frac{\mathit{FN}}{P}\\\\
   \text{False positive rate}& = \frac{\mathit{FP}}{\mathit{FP}+\mathit{TN}} = \frac{\mathit{FN}}{N}\\\\
-  \text{F$_{\beta}$-measure}& = (1+\beta^2) \cdot \frac{\text{recall} \cdot \text{precision}}{(\beta^2 \cdot \text{precision}) + \text{recall}}\ \ \ \text{(visualized $\beta = 3$)}\\\\
+  \text{F$_{\beta}$-measure}& = (1+\beta^2) \cdot \frac{\text{recall} \cdot \text{precision}}{(\beta^2 \cdot \text{precision}) + \text{recall}}\\\\
   \text{G-mean}& = \sqrt{\frac{\mathit{TP}}{\mathit{TP}+\mathit{FN}} \cdot \frac{\mathit{TN}}{\mathit{FP}+\mathit{TN}}} = \sqrt{\text{sensitivity} \cdot \text{specificity}}\\\\
-  \text{IBA(Accuracy)}& = (1 + \frac{1}{4}(\text{sensitivity}-\text{specificity})) \cdot \text{accuracy}\\\\
-  \text{IBA(F1 score)}& = (1 + (\text{sensitivity}-\text{specificity})) \cdot \text{F$_1$ score}\\\\
-  \text{IBA(G-mean)}& =   (1 + \frac{1}{2}(\text{sensitivity}-\text{specificity})) \cdot \text{G-mean}\\\\
+  \text{IBA(Accuracy)}& = (1 + \alpha(\text{sensitivity}-\text{specificity})) \cdot \text{accuracy}\\\\
+  \text{IBA(F$_1$ score)}& = (1 + \alpha(\text{sensitivity}-\text{specificity})) \cdot \text{F$_1$ score}\\\\
+  \text{IBA(G-mean)}& =   (1 + \alpha(\text{sensitivity}-\text{specificity})) \cdot \text{G-mean}\\\\
   \text{Jaccard coefficient}& = \frac{\mathit{TP}}{\mathit{TP}+\mathit{FP}+\mathit{FN}} \\\\
   \text{Kappa}& = \frac{\text{accuracy} - \frac{1}{n}(\frac{P \cdot \widehat{P}}{n} + \frac{N \cdot \widehat{N}}{n})}{1 - \frac{1}{n}(\frac{P \cdot \widehat{P}}{n} + \frac{N \cdot \widehat{N}}{n}) }\\\\
   \text{Log odds-ratio}& = \log(\text{diagnostic odds ratio})\\\\

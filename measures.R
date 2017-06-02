@@ -53,7 +53,6 @@ measureList <- list(
   "Pointwise AUC-ROC" = function(a,b,c,d,alpha=1,beta=1) {a/(a+c) * d/(b+d)},
   "Optimized precision" = function(a,b,c,d,alpha=1,beta=1) {(a+d)/(a+b+c+d) - abs(d/(b+d) - a/(a+c)) / (d/(b+d) + a/(a+c))},
   "IBA(G-mean)" = function(a,b,c,d,alpha=0.5,beta=1) {
-    alpha = 1/2
     Dom = a/(a+c) - d/(b+d)
     (1 + alpha*Dom) * ( (a/(a+c) * d/(b+d))^0.5 )
   },
