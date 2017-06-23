@@ -70,7 +70,7 @@ shinyServer(function(input, output, session) {
   
   getCrossSection <- reactive({
     points <- resolutions[["47905"]]
-    crossSectionPoints <- ((points[,1] + points[,3]) == as.integer(input$ratio * max(points[1,])))
+    crossSectionPoints <- ((points[,1] + points[,3]) == as.integer(as.numeric(input$ratio) * max(points[1,])))
     
     a <- points[,1]
     b <- points[,2]
@@ -81,11 +81,7 @@ shinyServer(function(input, output, session) {
     
     # Order the points to achieve a proper cross-section
     orderedPoints <- v[crossSectionPoints][order(b[crossSectionPoints], a[crossSectionPoints], decreasing = c(T,T))]
-    # Sadly, we have to clip inifinite values to plot them correctly
-    orderedPoints[orderedPoints == -Inf] <- range(orderedPoints, na.rm = T, finite = T)[1]
-    orderedPoints[orderedPoints == Inf] <- range(orderedPoints, na.rm = T, finite = T)[2]
-
-    matrix(orderedPoints, nrow = input$ratio*n+1)
+    matrix(orderedPoints, nrow = as.numeric(input$ratio)*n+1)
   })
   
   getPlotTitle <- reactive({
@@ -150,7 +146,7 @@ shinyServer(function(input, output, session) {
     if (!all(is.na(v))) {
       ranking <- dense_rank(v)
       pal <- colorRampPalette(getPallete(input$palette))(max(ranking, na.rm = T))
-      subpal <- unique(ranking[v %in% crossection])
+      subpal <- unique(ranking[v %in% crossection & !is.na(ranking)])
       subpal <- subpal[order(subpal)]
       pal <- pal[subpal]
     } else {
@@ -164,8 +160,12 @@ shinyServer(function(input, output, session) {
       contour <- FALSE
     }
 
+    # We have to clip inifinite values to plot them using image2D (luckily, hovering over a value still shows "Inf"/"-Inf")
+    crossection[crossection == -Inf] <- range(crossection, na.rm = T, finite = T)[1]
+    crossection[crossection == Inf] <- range(crossection, na.rm = T, finite = T)[2]
+    
     image2D(crossection, col=pal,
-            NAcol=input$naColor, resfac = 4, contour=contour,
+            NAcol=input$naColor, contour=contour, resfac = 4,
             colkey = FALSE, xaxt='n', yaxt='n', xlab="", ylab="")
     
     if (input$showLabels) {

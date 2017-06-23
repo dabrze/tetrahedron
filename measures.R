@@ -400,11 +400,11 @@ isClassificationMeasure <- function(measure) {
 
 measureParameters <- list(
   "IBA(G-mean)" = list("alpha" = list(min = 0, max = 1, default = 0.5, step = 0.05)),
-  "IBA(F1 score)" = list("alpha" = list(min = 0.05, max = 5, default = 1, step = 0.05)),
-  "IBA(Fb-measure)" = list("alpha" = list(min = 0.05, max = 5, default = 1, step = 0.1),
-                           "beta" = list(min = 0.05, max = 5, default = 1, step = 0.1)),
+  "IBA(F1 score)" = list("alpha" = list(min = 0.00, max = 1, default = 1, step = 0.05)),
+  "IBA(Fb-measure)" = list("alpha" = list(min = 0.00, max = 1, default = 1, step = 0.1),
+                           "beta" = list(min = 0.00, max = 5, default = 1, step = 0.1)),
   "IBA(Accuracy)" = list("alpha" = list(min = 0, max = 1, default = 0.25, step = 0.05)),
-  "Fb-measure" = list("beta" = list(min = 0.05, max = 5, default = 1, step = 0.1)),
+  "Fb-measure" = list("beta" = list(min = 0.00, max = 5, default = 1, step = 0.1)),
   "c1" = list("alpha" = list(min = 0, max = 1, default = 0.5, step = 0.05)),
   "c2" = list("alpha" = list(min = 0, max = 1, default = 0.5, step = 0.05))
 )
