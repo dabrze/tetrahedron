@@ -383,7 +383,7 @@ shinyServer(function(input, output, session) {
                       error = function(e) { FALSE }), 
            "Invalid expression in custom function."),
       need(input$customMeasure == "" || grepl("^[a-dptfn0-9 ().^%*/+-]+$", input$customMeasure),
-           "In custom functions, please use only: a, b, c, d, tp, tn, fp, fn, n, p1, p2, numbers, and math operators (+, -, *, /, ^). For example, try: a/(b-c)."),
+           "In custom functions, please use only: a, b, c, d, tp, fp, fn, tn, n, p1, p2, numbers, and math operators (+, -, *, /, ^). For example, try: a/(b-c)."),
       need(input$ratio >= 0.1 && input$ratio <= 0.9, 
            "The minority ratio has to be between 0.1 and 0.9 to properly display the image.")
     )
