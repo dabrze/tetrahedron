@@ -394,8 +394,12 @@ classificationMeasures <- c("True positive rate", "False negative rate", "False 
 
 interestingnessMeasures <- c("D", "M", "S", "N", "C", "F", "Z", "A", "c1", "c2", "c3", "c4", "Lift", "Certainty Factor", "Piatetsky-Shapiro")
 
-isClassificationMeasure <- function(measure) {
-  measure %in% classificationMeasures
+isClassificationMeasure <- function(measure, customFormula) {
+  measure %in% classificationMeasures && (customFormula == ""
+                                          || grepl("tp", customFormula)
+                                          || grepl("fp", customFormula)
+                                          || grepl("fn", customFormula)
+                                          || grepl("tn", customFormula))
 }
 
 measureParameters <- list(

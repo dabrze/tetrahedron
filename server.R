@@ -20,9 +20,7 @@ shinyServer(function(input, output, session) {
     resolutions[[as.character(input$resolution)]]
   })
   
-  getMeasureValues <- reactive({
-    validateInputs()
-    points <- getTetrahedronPoints()
+  calcValues <- function(points, input){
     a <- points[,1]
     b <- points[,2]
     c <- points[,3]
@@ -34,6 +32,11 @@ shinyServer(function(input, output, session) {
     } else {
       p1=input$alpha
       p2=input$beta
+      tp <- a
+      fp <- b
+      fn <- c
+      tn <- d
+      
       result <- eval(parse(text=input$customMeasure))
       
       if (length(result) == 1){
@@ -42,30 +45,19 @@ shinyServer(function(input, output, session) {
         result
       }
     }
+  }
+  
+  getMeasureValues <- reactive({
+    validateInputs()
+    points <- getTetrahedronPoints()
+    calcValues(points, input)
   })
   
   getCrosssectionMeasureValues <- reactive({
     validateInputs()
     points <- resolutions[["47905"]]
-    a <- points[,1]
-    b <- points[,2]
-    c <- points[,3]
-    d <- points[,4]
-    n <- max(points[1,])
     
-    if (input$customMeasure == "") {
-      measureList[[input$measure]](a, b, c, d, input$alpha, input$beta)
-    } else {
-      p1=input$alpha
-      p2=input$beta
-      result <- eval(parse(text=input$customMeasure))
-      
-      if (length(result) == 1){
-        rep(result, length(a))
-      } else {
-        result
-      }
-    }
+    calcValues(points, input)
   })
   
   getCrossSection <- reactive({
@@ -106,7 +98,7 @@ shinyServer(function(input, output, session) {
     d <- points[,4]
     n <- max(points[1,])
     v <- getMeasureValues()
-    cls <- (isClassificationMeasure(input$measure) && input$customMeasure == "")
+    cls <- isClassificationMeasure(input$measure, input$customMeasure)
     vertices <- t(matrix(c(+1, +1, +1, -1, +1, -1, -1, -1, +1, +1, -1, -1), ncol=4))
     
     x <- (a-b-c+d)/n
@@ -140,7 +132,7 @@ shinyServer(function(input, output, session) {
   })
   
   getCrossSectionPlot <- function(){
-    cls <- (isClassificationMeasure(input$measure) && input$customMeasure == "")
+    cls <- isClassificationMeasure(input$measure, input$customMeasure)
     crossection <- getCrossSection()
     v <- getCrosssectionMeasureValues()
     if (!all(is.na(v))) {
@@ -170,7 +162,7 @@ shinyServer(function(input, output, session) {
     
     if (input$showLabels) {
       title(main=ifelse(input$showTitle, getPlotTitle(), ""), line=2)
-      cls <- (isClassificationMeasure(input$measure) && input$customMeasure == "")
+      cls <- isClassificationMeasure(input$measure, input$customMeasure)
       
       if (cls) {
         mtext(expression(bar("FP")), side=1, line=0.5)
@@ -383,15 +375,15 @@ shinyServer(function(input, output, session) {
   outputOptions(output, 'hasBeta', suspendWhenHidden = FALSE)
   
   validateInputs <- reactive({
-    a=1; b=1; c=1; d=1; n=4; p1=1; p2=1;
+    a=b=c=d=tp=tn=fp=fn=1; n=4; p1=1; p2=1;
     
     shiny::validate(
       need(input$customMeasure == "" ||
              tryCatch({ eval(parse(text=input$customMeasure)); TRUE },
                       error = function(e) { FALSE }), 
            "Invalid expression in custom function."),
-      need(input$customMeasure == "" || grepl("^[a-dp0-9 n().^%*/+-]+$", input$customMeasure),
-           "In custom functions, please use only: a, b, c, d, n, p1, p2, numbers, and math operators (+, -, *, /, ^). For example, try: a/(b-c)."),
+      need(input$customMeasure == "" || grepl("^[a-dptfn0-9 ().^%*/+-]+$", input$customMeasure),
+           "In custom functions, please use only: a, b, c, d, tp, tn, fp, fn, n, p1, p2, numbers, and math operators (+, -, *, /, ^). For example, try: a/(b-c)."),
       need(input$ratio >= 0.1 && input$ratio <= 0.9, 
            "The minority ratio has to be between 0.1 and 0.9 to properly display the image.")
     )
