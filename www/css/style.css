@@ -39,6 +39,10 @@ ul > li {
   color: #c02f1d;
 }
 
+.shiny-output-error-hidden {
+  visibility: hidden;
+}
+
 .help, .measures, .header {
   font-size: 16px;
 }
