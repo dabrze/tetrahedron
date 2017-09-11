@@ -439,8 +439,8 @@ getBrowserPar3d <- function(input) {
 resolutions <- list(
   "969" = readRDS("www/grids/x16.RDS"),
   "6545" = readRDS("www/grids/x32.RDS"),
-  "47905" = readRDS("www/grids/x64.RDS"),
-  "156849" = readRDS("www/grids/x96.RDS")
+  "47905" = readRDS("www/grids/x64.RDS")#,
+  #"156849" = readRDS("www/grids/x96.RDS")
 )
 
 csMult <- 12

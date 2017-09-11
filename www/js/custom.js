@@ -17,7 +17,7 @@ $(document).ready(function(){
 		
 		var link = document.createElement("a");
 		link.download = fileName + "_" + new Date().toJSON().slice(0,19) + ".png";
-		link.href = rglinst.canvas.toDataURL("image/png");
+		link.href = rglinst.canvas.toDataURL("image/png", 1.0);
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);

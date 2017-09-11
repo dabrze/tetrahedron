@@ -50,7 +50,8 @@ shinyUI(fluidPage(
                       animate=animationOptions(interval = 700, loop = T))),
       conditionalPanel(tetrahedronTab,
           selectInput("resolution", label = "Resolution [points]",
-                     choices = list(969, 6545, 47905, 156849))),
+                     choices = list(969, 6545, 47905#, 156849
+                                    ))),
       conditionalPanel(nonMeasureTab,
           selectInput("palette", label = "Color palette",
                       choices = list("Jet", "Inversed spectral" = "Spectral", "Emerald to brown" = "BrBG",
